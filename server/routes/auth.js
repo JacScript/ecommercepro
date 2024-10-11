@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const router = require("express").Router();
 const User = require("../models/User"); // Assuming User model is in this path
 
@@ -15,20 +14,20 @@ router.post("/register", async (request, response) => {
     }
 
     // Hash the password before saving
-    const hashpassword = await bcrypt.hash(password, 10);
+    // const hashpassword = await bcrypt.hash(password, 10);
 
     // Create the new user with the hashed password
     const user = await User.create({
       username,
       email,
-      password: hashpassword, // Save the hashed password
+      password 
     });
 
     // Remove the password field from the response
-    const { password: _, ...userWithoutPassword } = user.toObject();
+    const { password: _, ...others } = user.toObject();
 
     // Send the created user without the password field
-    response.status(201).json(userWithoutPassword);
+    response.status(201).json(others);
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: "Server error. Please try again." });
@@ -39,26 +38,29 @@ router.post("/register", async (request, response) => {
 // @desc    Auth user/set token
 //route     /auth/login
 //@access   Public
-router.post(
-    "/auth/login",async (request, response) => {
-      const { email, password } = request.body;
+router.post("/login", async (request, response) => {
+    const { email, password } = request.body;
   
+    try {
+      // Find user by email
       const user = await User.findOne({ email });
   
+      // Check if user exists and password matches
       if (user && (await user.matchPassword(password))) {
-        await generateToken(response, user._id);
+        // Remove the password field from the response
+        const { password: _, ...others } = user.toObject();
   
-        response.status(200).json({
-          id: user._id,
-          username: user.username,
-          email: user.email,
-          // token: token
-        });
+        // Respond with user details (excluding password)
+        response.status(200).json(others);
       } else {
-        response.status(401);
-        throw new Error("Invalid email or password");
+        // Invalid email or password
+        response.status(401).json({ message: "Invalid email or password" });
       }
-    })
-  ;
+    } catch (err) {
+      console.error(err);
+      response.status(500).json({ message: "Server error. Please try again." });
+    }
+  });
+  
 
 module.exports = router;

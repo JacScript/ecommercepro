@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const bcrypt = require("bcrypt");
+
 
 // Define the User schema
 const schema = new Schema({
@@ -21,6 +23,23 @@ const schema = new Schema({
         default: false // Defaults to false for non-admin users
     }
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
+
+// Match user entered password to hashed password in database
+schema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+  };
+
+// Encrypt password using bcrypt
+schema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+      next();
+    }
+  
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  });
+  
+
 
 // Optional: Indexing for better performance on createdAt and updatedAt fields
 schema.index({ createdAt: -1 }, { background: true });
