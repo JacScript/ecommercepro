@@ -2,7 +2,8 @@
 const express = require('express');
 const application = express();
 // const routes = require("./routes");
-const userRoutes = require("./routes/auth.js");
+const authRoutes = require("./routes/auth.js");
+const userRoutes = require("./routes/user.js");
 const  dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -19,7 +20,8 @@ const MONGOURL = process.env.MONGO_URL;
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 
 //handling routes
-application.use("/auth", userRoutes);
+application.use("/auth", authRoutes);
+application.use("/users", userRoutes);
 
 application.use(notFound);
 application.use(errorHandler);

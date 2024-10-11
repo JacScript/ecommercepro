@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User"); // Assuming User model is in this path
+const jwt = require('jsonwebtoken')
+
 
 // REGISTER
 router.post("/register", async (request, response) => {
@@ -49,9 +51,18 @@ router.post("/login", async (request, response) => {
       if (user && (await user.matchPassword(password))) {
         // Remove the password field from the response
         const { password: _, ...others } = user.toObject();
+
+        const accessToken = await jwt.sign(
+          {
+            id: user._id,
+            isAdmin: user.isAdmin,
+          },
+          process.env.JWT_SEC,
+          { expiresIn: "30d" }
+        );
   
         // Respond with user details (excluding password)
-        response.status(200).json(others);
+        response.status(200).json({...others, accessToken});
       } else {
         // Invalid email or password
         response.status(401).json({ message: "Invalid email or password" });
