@@ -10,15 +10,15 @@ const schema = new Schema({
     desc: {
         type: String,
         required: true,
-        unique: true // It's uncommon to have unique descriptions; remove if not needed
+       // unique: true // It's uncommon to have unique descriptions; remove if not needed
     },
     img: {
         type: String, // Typically a URL or image path as a string
         required: true
     },
     categories: {
-        type: [String], // Changed to an array of strings to allow multiple categories
-        required: true
+        type: Array, // Changed to an array of strings to allow multiple categories
+       // required: true
     },
     size: {
         type: String, // Assuming size is a string (e.g., 'M', 'L', etc.)

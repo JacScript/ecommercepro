@@ -138,4 +138,35 @@ router.get('/', verifyTokenAndAdmin, async (request, response) => {
     }
   });
 
+     // @desc    get user stats
+//route     GET /user/stats
+//@access   private
+router.get("/stats", verifyTokenAndAdmin, async (request, response) => {
+  const date = new Date();  // Get the current date
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));  // Calculate the date for one year ago from today
+
+  try {
+    const data = await User.aggregate([
+      { 
+        $match: { createdAt: { $gte: lastYear }}  // Match users created after or on 'lastYear' date
+      },
+      {
+        $project: {
+          month: { $month: "$createdAt" },  // Extract the month from 'createdAt' field for each user
+        },
+      },
+      {
+        $group: {
+          _id: "$month",  // Group users by month
+          total: { $sum: 1 },  // Count the number of users in each month
+        },
+      },
+    ]);
+    
+    response.status(200).json(data);  // Send a successful response with the aggregated data in JSON format
+  } catch (err) {
+    response.status(500).json(err);  // Handle any errors by sending a 500 status with the error details
+  }
+});
+
 module.exports = router

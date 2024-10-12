@@ -4,6 +4,7 @@ const application = express();
 // const routes = require("./routes");
 const authRoutes = require("./routes/auth.js");
 const userRoutes = require("./routes/user.js");
+const productRoutes = require("./routes/product.js");
 const  dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -22,6 +23,7 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 //handling routes
 application.use("/auth", authRoutes);
 application.use("/users", userRoutes);
+application.use("/products", productRoutes);
 
 application.use(notFound);
 application.use(errorHandler);
