@@ -6,22 +6,28 @@ const { verifyTokenAndAdmin, verifyToken, verifyTokenAndAuthorization } = requir
 // @route   POST /order/
 // @access  Authenticated users (verified by verifyToken middleware)
 router.post("/", verifyToken, async (request, response) => {
-    // Create a new order instance using the data sent in the request body
-    const newOrder = new Order(request.body);
-
     try {
+        // Validate request body (optional, based on your schema)
+        if (!request.body || !request.body.user || !request.body.amount) {
+            return response.status(400).json({ message: "Invalid order data. Please provide all required fields." });
+        }
+
+        // Create a new order instance using the data sent in the request body
+        const newOrder = new Order(request.body);
+
         // Save the order to the database
         const savedOrder = await newOrder.save();
 
         // Send a success response with the saved order
         response.status(201).json(savedOrder);  // Use 201 status for "Created"
     } catch (err) {
-       // console.error(err);  // Log the error for debugging
+        console.error(err);  // Log the error for debugging
 
         // Send a 500 status with a user-friendly error message in case of a server error
         response.status(500).json({ message: "Failed to create order. Please try again." });
     }
 });
+
 
 // @desc    Update an existing order 
 // @route   PUT /order/:id
@@ -144,24 +150,51 @@ router.get("/", verifyTokenAndAdmin, async (request, response) => {
     }
 });
 
-// @desc    Get stats
+// @desc    Get income statistics
 // @route   GET /order/income
 // @access  Admin only (verified by verifyTokenAndAdmin middleware)
 router.get("/income", verifyTokenAndAdmin, async (request, response) => {
-    const date =  new Date();
+    // Get the current date
+    const date = new Date();
+    
+    // Calculate last month's date by subtracting 1 month from the current date
     const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
-    const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() -1 ));
+    
+    // Calculate the previous month by subtracting 1 more month from lastMonth
+    const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
 
     try {
-        
-        
-    } catch (err) {
-        // console.error(err);  // Log the error for debugging
- 
-         // Return a 500 status in case of server error with an error message
-         response.status(500).json({ message: "Server error. Please try again." });
-     }
+        // Use MongoDB aggregation to calculate income stats
+        const income = await Order.aggregate([
+            // Stage 1: Match orders created after the previous month
+            { $match: { createdAt: { $gte: previousMonth } } },
+            
+            // Stage 2: Project (extract) the month and the sales amount for each order
+            {
+                $project: {
+                    month: { $month: "$createdAt" },  // Extract the month from the createdAt date
+                    sales: "$amount",  // Use the "amount" field as the sales data
+                }
+            },
 
-})
+            // Stage 3: Group the data by month and calculate the total sales for each month
+            {
+                $group: {
+                    _id: "$month",  // Group by the month extracted earlier
+                    total: { $sum: "$sales" }  // Sum up the sales amounts for each month
+                }
+            }
+        ]);
+
+        // Send the calculated income statistics as a response
+        response.status(200).json(income);
+    } catch (err) {
+        console.error(err);  // Log the error for debugging purposes
+        
+        // Return a 500 status with an error message in case of a server issue
+        response.status(500).json({ message: "Server error. Please try again." });
+    }
+});
+
 
 module.exports = router

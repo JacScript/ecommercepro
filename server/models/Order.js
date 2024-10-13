@@ -14,7 +14,7 @@ const schema = new Schema(
         productId: {
           type: Schema.Types.ObjectId, // Each product is an ObjectId
           ref: "Product", // Refers to the "Product" model
-          required: true, // Ensures each product in the order is valid
+          //required: true, // Ensures each product in the order is valid
         },
         quantity: {
           type: Number, // Number of this specific product in the order
@@ -22,13 +22,13 @@ const schema = new Schema(
         },
         amount: {
           type: Number, // Amount for the specific product (e.g., price * quantity)
-          required: true, // Total cost for this product is required
+         // required: true, // Total cost for this product is required
         }
       },
     ],
     address: {
       type: Object, // The shipping address for the order
-      required: true, // Address is required
+      //required: true, // Address is required
     },
     status: {
       type: String, // Status of the order

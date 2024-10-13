@@ -1,14 +1,17 @@
 'use strict'
 const express = require('express');
 const application = express();
-// const routes = require("./routes");
-const authRoutes = require("./routes/auth.js");
-const userRoutes = require("./routes/user.js");
-const productRoutes = require("./routes/product.js");
 const  dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 dotenv.config();
+// const routes = require("./routes");
+const authRoutes = require("./routes/auth.js");
+const userRoutes = require("./routes/user.js");
+const productRoutes = require("./routes/product.js");
+const cartRoutes = require("./routes/cart.js");
+const orderRoutes = require("./routes/order.js");
+
 
 application.use(express.json());
 application.use(express.urlencoded({ extended: true}));
@@ -24,6 +27,8 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 application.use("/auth", authRoutes);
 application.use("/users", userRoutes);
 application.use("/products", productRoutes);
+application.use("/cart", cartRoutes);
+application.use("/order", orderRoutes);
 
 application.use(notFound);
 application.use(errorHandler);

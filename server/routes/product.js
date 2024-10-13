@@ -125,7 +125,7 @@ router.get('/', async (request, response) => {
 
         // If "new" is specified, sort products by creation date (newest first) and limit to 5 results
         if (qNew) {
-            products = await Product.find().sort({ createdAt: -1 }).limit(1);
+            products = await Product.find().sort({ createdAt: -1 }).limit(5);
         } 
         // If a category is specified, filter products by category
         else if (qCategory) {
