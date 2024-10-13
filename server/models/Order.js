@@ -20,12 +20,13 @@ const schema = new Schema(
           type: Number, // Number of this specific product in the order
           default: 1, // Default quantity is 1 if not specified
         },
-        amount: {
-          type: Number, // Amount for the specific product (e.g., price * quantity)
-         // required: true, // Total cost for this product is required
-        }
+        
       },
     ],
+    amount: {
+      type: Number, // Amount for the specific product (e.g., price * quantity)
+     // required: true, // Total cost for this product is required
+    },
     address: {
       type: Object, // The shipping address for the order
       //required: true, // Address is required
