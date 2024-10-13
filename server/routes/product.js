@@ -31,9 +31,9 @@ router.put("/:id", verifyTokenAndAdmin, async (request, response) => {
         // Extract the product ID from the request parameters
         const productId = request.params.id;
 
-         // Validate userId format
+         // Validate productId format
       if (!mongoose.Types.ObjectId.isValid(productId)) {
-        return response.status(400).json({ message: "Invalid userId" });
+        return response.status(400).json({ message: "Invalid product ID" });
       }
 
         // Find the product by its ID and update it with the data from the request body
@@ -125,7 +125,7 @@ router.get('/', async (request, response) => {
 
         // If "new" is specified, sort products by creation date (newest first) and limit to 5 results
         if (qNew) {
-            products = await Product.find().sort({ createdAt: -1 }).limit(5);
+            products = await Product.find().sort({ createdAt: -1 }).limit(1);
         } 
         // If a category is specified, filter products by category
         else if (qCategory) {
