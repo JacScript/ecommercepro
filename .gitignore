@@ -17,6 +17,7 @@
 # misc
 .DS_Store
 /server/.env
+/client/.env
 ../server/.env
 ../server/.env.local
 ../server/.env.development
