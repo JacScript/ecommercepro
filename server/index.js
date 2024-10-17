@@ -5,6 +5,7 @@ const  dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 dotenv.config();
+const cors = require("cors");
 // const routes = require("./routes");
 const authRoutes = require("./routes/auth.js");
 const userRoutes = require("./routes/user.js");
@@ -16,6 +17,15 @@ const orderRoutes = require("./routes/order.js");
 application.use(express.json());
 application.use(express.urlencoded({ extended: true}));
 application.use(cookieParser());
+
+// // CORS configuration
+application.use(
+  cors({
+    origin: ["http://localhost:3000"], // Change to your frontend's port
+    credentials: true,
+  })
+);
+
 
 const port = process.env.PORT || 5050;
 const MONGOURL = process.env.MONGO_URL;

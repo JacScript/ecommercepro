@@ -21,16 +21,20 @@ const schema = new Schema({
        // required: true
     },
     size: {
-        type: String, // Assuming size is a string (e.g., 'M', 'L', etc.)
+        type: Array, // Assuming size is a string (e.g., 'M', 'L', etc.)
         required: true
     },
     color: {
-        type: String, // Assuming color is a string (e.g., 'red', 'blue', etc.)
+        type: Array, // Assuming color is a string (e.g., 'red', 'blue', etc.)
         required: true
     },
     price: {
         type: Number, // Price should be a Number, not a String
         required: true
+    },
+    inStock: {
+        type: Boolean,
+        default: true
     }
 }, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
 
