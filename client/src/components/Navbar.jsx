@@ -3,6 +3,8 @@ import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
 
 const Container = styled.div`
   height: 60px;
@@ -67,6 +69,8 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
+  const cart = useSelector(state=>state.cart);
+  console.log(cart);
   return (
     <Container>
       <Wrapper>

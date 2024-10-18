@@ -1,4 +1,4 @@
-import { LocalPharmacyRounded } from "@material-ui/icons";
+// import { LocalPharmacyRounded } from "@material-ui/icons";
 
 export const sliderItems = [
     {
