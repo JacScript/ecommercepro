@@ -12,6 +12,7 @@ const userRoutes = require("./routes/user.js");
 const productRoutes = require("./routes/product.js");
 const cartRoutes = require("./routes/cart.js");
 const orderRoutes = require("./routes/order.js");
+const stripeRoutes = require("./routes/stripe.js");
 
 
 application.use(express.json());
@@ -39,6 +40,7 @@ application.use("/users", userRoutes);
 application.use("/products", productRoutes);
 application.use("/cart", cartRoutes);
 application.use("/order", orderRoutes);
+application.use("/checkout", orderRoutes);
 
 application.use(notFound);
 application.use(errorHandler);

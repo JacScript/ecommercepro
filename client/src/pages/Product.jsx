@@ -8,6 +8,8 @@ import { mobile } from "../responsive";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import { useState, useEffect } from "react";
 import { publicRequest } from "../requestMethods";
+import { addProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
 
 const Container = styled.div``;
 
@@ -125,7 +127,7 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Function to fetch a single product based on the 'id' parameter
@@ -135,7 +137,7 @@ const Product = () => {
         const res = await publicRequest.get(`/products/find/${id}`);
         
         // Log the response data to the console (this line was incomplete in your original code)
-        console.log(res.data);
+        // console.log(res.data);
         
         // Set the product state with the fetched data
         setProduct(res.data);
@@ -159,11 +161,11 @@ const Product = () => {
     }
   };
 
-  // const handleClick = () => {
-  //   dispatch(
-  //     addProduct({ ...product, quantity, color, size })
-  //   );
-  // };
+  const handleClick = () => {
+    dispatch(
+      addProduct({ ...product, quantity, color, size })
+    );
+  };
 
   return (
     <Container>
@@ -202,7 +204,7 @@ const Product = () => {
               <Amount>{quantity}</Amount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            <Button >ADD TO CART</Button>
+            <Button onClick={handleClick} >ADD TO CART</Button>
           </AddContainer>
         </InfoContainer>
       </Wrapper>
