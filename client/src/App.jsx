@@ -11,6 +11,7 @@ import {
   // Link
 } from "react-router-dom";
 import PrivateRoute from "./pages/PrivateRoute";
+import Success from "./pages/Success";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
         <PrivateRoute path="/register" component={Register} redirect={Home}/>
         {/* <Route path="/login" component={Login} /> */}
         <Route path="/register" component={Register} />
+        <Route path="/success" component={Success} />
       </Switch>
     </BrowserRouter>
   );

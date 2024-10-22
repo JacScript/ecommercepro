@@ -40,7 +40,7 @@ application.use("/users", userRoutes);
 application.use("/products", productRoutes);
 application.use("/cart", cartRoutes);
 application.use("/order", orderRoutes);
-application.use("/checkout", orderRoutes);
+application.use("/checkout", stripeRoutes);
 
 application.use(notFound);
 application.use(errorHandler);

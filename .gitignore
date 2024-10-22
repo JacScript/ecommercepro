@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+../admin/node_modules
 ../client/node_modules
 ../server/node_modules
 /server/node_modules
@@ -16,9 +17,11 @@
 
 # misc
 .DS_Store
+/admin/.env
 /server/.env
 /client/.env
 ../server/.env
+../admin/.env
 ../server/.env.local
 ../server/.env.development
 ../server/.env.test.local

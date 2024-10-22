@@ -171,24 +171,60 @@ const Cart = () => {
   const [stripeToken, setStripeToken] = useState(null);
   const history = useHistory();
 
-  const onToken = (token) => {
-    setStripeToken(token);
+
+  // Handles the token received from Stripe after a successful payment authorization
+const onToken = (token) => {
+  // Save the Stripe token in state for later use in the payment request
+  setStripeToken(token);
+};
+
+useEffect(() => {
+  // Function to make an API request to process the payment
+  const makeRequest = async () => {
+    try {
+      // Send a POST request to the backend to process the payment
+      const res = await userRequest.post("/checkout/payment", {
+        tokenId: stripeToken.id,  // Send the Stripe token
+        amount: 500,  // Payment amount (ensure this is set correctly in production)
+      });
+
+      // Redirect to the success page and pass the payment data and cart information
+      history.push("/success", {
+        stripeData: res.data, // Response from the payment API
+        products: cart, // Pass the cart details (ensure 'cart' is defined and correct)
+      });
+    } catch (error) {
+      // Handle any errors that occur during the payment process
+      console.error("Payment request failed", error);
+    }
   };
 
-  useEffect(() => {
-    const makeRequest = async () => {
-      try {
-        const res = await userRequest.post("/checkout/payment", {
-          tokenId: stripeToken.id,
-          amount: 500,
-        });
-        history.push("/success", {
-          stripeData: res.data,
-          products: cart, });
-      } catch {}
-    };
-    stripeToken && makeRequest();
-  }, [stripeToken, cart.total, history]);
+  // Trigger the payment request if a Stripe token exists
+  if (stripeToken) {
+    makeRequest();
+  }
+}, [stripeToken, history, cart]); // Dependencies: stripeToken and history
+
+
+
+  // const onToken = (token) => {
+  //   setStripeToken(token);
+  // };
+
+  // useEffect(() => {
+  //   const makeRequest = async () => {
+  //     try {
+  //       const res = await userRequest.post("/checkout/payment", {
+  //         tokenId: stripeToken.id,
+  //         amount: 500,
+  //       });
+  //       history.push("/success", {
+  //         stripeData: res.data,
+  //         products: cart, });
+  //     } catch {}
+  //   };
+  //   stripeToken && makeRequest();
+  // }, [stripeToken, cart.total, history]);
 
   return (
     <Container>
