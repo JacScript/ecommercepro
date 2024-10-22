@@ -21,6 +21,9 @@ const schema = new Schema({
     isAdmin: {
         type: Boolean, // Use 'Boolean' with a capital 'B' for the type
         default: false // Defaults to false for non-admin users
+    },
+    img: {
+      type: String
     }
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 

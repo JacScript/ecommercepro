@@ -19,10 +19,10 @@ application.use(express.json());
 application.use(express.urlencoded({ extended: true}));
 application.use(cookieParser());
 
-// // CORS configuration
+// CORS configuration
 application.use(
   cors({
-    origin: ["http://localhost:3000"], // Change to your frontend's port
+    origin: ["http://localhost:3000", "http://localhost:3001"], // Allow both ports
     credentials: true,
   })
 );
@@ -39,7 +39,7 @@ application.use("/auth", authRoutes);
 application.use("/users", userRoutes);
 application.use("/products", productRoutes);
 application.use("/cart", cartRoutes);
-application.use("/order", orderRoutes);
+application.use("/orders", orderRoutes);
 application.use("/checkout", stripeRoutes);
 
 application.use(notFound);
