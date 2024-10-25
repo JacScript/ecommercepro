@@ -28,6 +28,32 @@ router.post("/", verifyToken, async (request, response) => {
     }
 });
 
+// router.post('/', verifyToken, async (req, res) => {
+//     try {
+//         const { userId, products, totalAmount } = req.body;
+
+//         // Validate input data
+//         if (!userId || !products || !totalAmount) {
+//             return res.status(400).json({ message: 'Please provide all required fields.' });
+//         }
+
+//         // Create a new order
+//         const newOrder = new Order({
+//             userId,
+//             products,
+//             totalAmount
+//         });
+
+//         // Save the order to the database
+//         const savedOrder = await newOrder.save();
+
+//         res.status(201).json(savedOrder);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Failed to create order.' });
+//     }
+// });
+
 
 // @desc    Update an existing order 
 // @route   PUT /order/:id
@@ -156,6 +182,8 @@ router.get("/", verifyTokenAndAdmin, async (request, response) => {
 router.get("/income", verifyTokenAndAdmin, async (request, response) => {
     // Get the current date
     const date = new Date();
+
+    const productId = request.query.pid;
     
     // Calculate last month's date by subtracting 1 month from the current date
     const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
@@ -164,35 +192,42 @@ router.get("/income", verifyTokenAndAdmin, async (request, response) => {
     const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
 
     try {
-        // Use MongoDB aggregation to calculate income stats
-        const income = await Order.aggregate([
-            // Stage 1: Match orders created after the previous month
-            { $match: { createdAt: { $gte: previousMonth } } },
-            
-            // Stage 2: Project (extract) the month and the sales amount for each order
-            {
-                $project: {
-                    month: { $month: "$createdAt" },  // Extract the month from the createdAt date
-                    sales: "$amount",  // Use the "amount" field as the sales data
-                }
-            },
+      // Use MongoDB aggregation to calculate income stats
+      const income = await Order.aggregate([
+        // Stage 1: Match orders created after the previous month
+        {
+          $match: {
+            createdAt: { $gte: previousMonth },
+            ...(productId && {
+              products: { $elemMatch: { productId } },
+            }),
+          },
+        },
 
-            // Stage 3: Group the data by month and calculate the total sales for each month
-            {
-                $group: {
-                    _id: "$month",  // Group by the month extracted earlier
-                    total: { $sum: "$sales" }  // Sum up the sales amounts for each month
-                }
-            }
-        ]);
+        // Stage 2: Project (extract) the month and the sales amount for each order
+        {
+          $project: {
+            month: { $month: "$createdAt" }, // Extract the month from the createdAt date
+            sales: "$amount", // Use the "amount" field as the sales data
+          },
+        },
 
-        // Send the calculated income statistics as a response
-        response.status(200).json(income);
+        // Stage 3: Group the data by month and calculate the total sales for each month
+        {
+          $group: {
+            _id: "$month", // Group by the month extracted earlier
+            total: { $sum: "$sales" }, // Sum up the sales amounts for each month
+          },
+        },
+      ]);
+
+      // Send the calculated income statistics as a response
+      response.status(200).json(income);
     } catch (err) {
-        console.error(err);  // Log the error for debugging purposes
-        
-        // Return a 500 status with an error message in case of a server issue
-        response.status(500).json({ message: "Server error. Please try again." });
+      console.error(err); // Log the error for debugging purposes
+
+      // Return a 500 status with an error message in case of a server issue
+      response.status(500).json({ message: "Server error. Please try again." });
     }
 });
 

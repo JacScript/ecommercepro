@@ -24,7 +24,12 @@ const schema = new Schema({
     },
     img: {
       type: String
-    }
+    },
+    status: {
+      type: String,
+      enum: ['active', 'inactive', 'suspended'], // Possible status values
+      default: 'active' // Default status
+  },
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
 // Match user entered password to hashed password in database
