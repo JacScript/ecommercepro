@@ -9,50 +9,94 @@ const router = require('express').Router();
 //route    PUT /user/:id
 //@access   private
 router.put('/:id', verifyTokenAndAuthorization, async (request, response) => {
-    const userId = request.params.id;
-  
-    try {
+  const userId = request.params.id;
+  const { username, email, phoneNumber, img, city, country } = request.body;
 
-          //Validate userId format:
+  try {
+    // Validate userId format
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return response.status(400).json({ message: "Invalid userId" });
-      }
-      // Find the user by ID
-      const user = await User.findById(userId);
-  
-      if (user) {
-        // Update username and email only if provided in the request body
-        user.username = request.body.username || user.username;
-        user.email = request.body.email || user.email;
-  
-        // If a new password is provided, hash it before saving
-        // if (request.body.password) {
-        //   const salt = await bcrypt.genSalt(10);
-        //   user.password = await bcrypt.hash(request.body.password, salt);
-        // }
-  
-        // Save the updated user
-        const updatedUser = await user.save();
-
-         // Remove the password field from the response
-        const { password: _, ...others } = updatedUser.toObject();
-  
-        // Return the updated user data (without the password)
-        response.status(200).json({ others
-          //_id: updatedUser._id,
-         // username: updatedUser.username,
-         // email: updatedUser.email,
-        });
-      } else {
-        // If user not found, return a 404 response
-        response.status(404).json({ message: "User not found!" });
-      }
-    } catch (err) {
-      console.error(err);
-      // Handle server error
-      response.status(500).json({ message: "Server error. Please try again." });
+      return response.status(400).json({ message: "Invalid userId" });
     }
-  });
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (user) {
+      // Update fields only if provided in the request body
+      user.username = username || user.username;
+      user.email = email || user.email;
+      user.phoneNumber = phoneNumber || user.phoneNumber;
+      user.img = img || user.img;
+      user.address = { 
+        city: city || user.address.city,
+        country: country || user.address.country 
+      };
+
+      // Save the updated user
+      const updatedUser = await user.save();
+
+      // Remove the password field from the response
+      const { password, ...others } = updatedUser.toObject();
+
+      // Return the updated user data (without the password)
+      response.status(200).json(others);
+    } else {
+      // If user not found, return a 404 response
+      response.status(404).json({ message: "User not found!" });
+    }
+  } catch (err) {
+    console.error(err);
+    // Handle server error
+    response.status(500).json({ message: "Server error. Please try again." });
+  }
+});
+
+// router.put('/:id', verifyTokenAndAuthorization, async (request, response) => {
+//     const userId = request.params.id;
+//     const { username, email, phoneNumber, img, city, country } = request.body;
+  
+//     try {
+
+//           //Validate userId format:
+//     if (!mongoose.Types.ObjectId.isValid(userId)) {
+//         return response.status(400).json({ message: "Invalid userId" });
+//       }
+//       // Find the user by ID
+//       const user = await User.findById(userId);
+  
+//       if (user) {
+//         // Update username and email only if provided in the request body
+//         user.username = request.body.username || user.username;
+//         user.email = request.body.email || user.email;
+  
+//         // If a new password is provided, hash it before saving
+//         // if (request.body.password) {
+//         //   const salt = await bcrypt.genSalt(10);
+//         //   user.password = await bcrypt.hash(request.body.password, salt);
+//         // }
+  
+//         // Save the updated user
+//         const updatedUser = await user.save();
+
+//          // Remove the password field from the response
+//         const { password: _, ...others } = updatedUser.toObject();
+  
+//         // Return the updated user data (without the password)
+//         response.status(200).json({ others
+//           //_id: updatedUser._id,
+//          // username: updatedUser.username,
+//          // email: updatedUser.email,
+//         });
+//       } else {
+//         // If user not found, return a 404 response
+//         response.status(404).json({ message: "User not found!" });
+//       }
+//     } catch (err) {
+//       console.error(err);
+//       // Handle server error
+//       response.status(500).json({ message: "Server error. Please try again." });
+//     }
+//   });
  
 
   // @desc    Delete user 

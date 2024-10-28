@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 
 // REGISTER
 router.post("/register", async (request, response) => {
-  const { username, email, password } = request.body;
+  const { username, email, password, img, phoneNumber, dateOfBirth, city, country } = request.body;
 
   try {
     // Check if the user already exists with the provided email
@@ -22,7 +22,11 @@ router.post("/register", async (request, response) => {
     const user = await User.create({
       username,
       email,
-      password 
+      img,
+      phoneNumber,
+      dateOfBirth,
+      password ,
+      address: { city, country }
     });
 
     // Remove the password field from the response
