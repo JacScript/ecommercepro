@@ -29,11 +29,21 @@ router.post("/register", async (request, response) => {
       address: { city, country }
     });
 
+
+    const accessToken = await jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.JWT_SEC,
+      { expiresIn: "30d" }
+    );
+
     // Remove the password field from the response
     const { password: _, ...others } = user.toObject();
 
     // Send the created user without the password field
-    response.status(201).json(others);
+    response.status(201).json({...others, accessToken});
   } catch (err) {
     console.error(err);
     response.status(500).json({ message: "Server error. Please try again." });

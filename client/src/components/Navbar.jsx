@@ -6,6 +6,7 @@ import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+
 const Container = styled.div`
   height: 60px;
   ${mobile({ height: "50px" })}
@@ -64,11 +65,43 @@ const Right = styled.div`
 const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
+  align-item: center;
+ 
   margin-left: 25px;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
+const AvatarName = styled.div`
+   font-size: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    top: 10;
+    display: flex;
+    align-item: center;
+    background-color: blue;
+`
+
+const TopAvatar = styled.img`
+  font-size: 14px;
+  cursor: pointer;
+    border-radius: 50%;
+  margin-left: 25px;
+  // background-color: blue;
+  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
+`;
+
+const UserContainer = styled.div`
+   height: 40px;
+   display: flex;
+   width: 25px
+   align-items: center;
+    justify-content: space-between;
+    background-color: red;
+    
+`
+
 const Navbar = () => {
+  const  user  = useSelector((state) => state.user.currentUser);
   const quantity = useSelector(state=>state.cart.quantity);
   return (
     <Container>
@@ -84,8 +117,16 @@ const Navbar = () => {
           <Logo>PENGUIN TECH.</Logo>
         </Center>
         <Right>
-          <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem>
+          {
+            user ? (< UserContainer>
+            <AvatarName>{user.username}</AvatarName>
+            <TopAvatar src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" className="topAvatar" />
+            </UserContainer>) 
+           : (<><MenuItem>REGISTER</MenuItem>
+          <MenuItem>SIGN IN</MenuItem></>)
+          }
+          {/* <MenuItem>REGISTER</MenuItem>
+          <MenuItem>SIGN IN</MenuItem> */}
           <MenuItem>
           <Link to="/cart">
           
