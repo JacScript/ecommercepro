@@ -71,34 +71,37 @@ const MenuItem = styled.div`
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
+// 
+
 const AvatarName = styled.div`
    font-size: 10px;
     cursor: pointer;
     text-transform: uppercase;
-    top: 10;
     display: flex;
     align-item: center;
-    background-color: blue;
+    width: 40%;
+    // font-weight: 700;
 `
 
 const TopAvatar = styled.img`
-  font-size: 14px;
+  width: 40px;
+  height: 40px;
+  // font-size: 10px;
   cursor: pointer;
-    border-radius: 50%;
-  margin-left: 25px;
+  border-radius: 50%;
+  margin-left: 8px;
   // background-color: blue;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
-const UserContainer = styled.div`
-   height: 40px;
-   display: flex;
-   width: 25px
-   align-items: center;
-    justify-content: space-between;
-    background-color: red;
-    
-`
+const AvatarContainer = styled.div`
+  height: 30px;
+  display: flex;
+  width: 5rem;
+  align-items: center;
+  justify-content: space-between;
+  // background-color: red;
+`;
 
 const Navbar = () => {
   const  user  = useSelector((state) => state.user.currentUser);
@@ -118,10 +121,10 @@ const Navbar = () => {
         </Center>
         <Right>
           {
-            user ? (< UserContainer>
+            user ? (< AvatarContainer>
             <AvatarName>{user.username}</AvatarName>
             <TopAvatar src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" className="topAvatar" />
-            </UserContainer>) 
+            </AvatarContainer>) 
            : (<><MenuItem>REGISTER</MenuItem>
           <MenuItem>SIGN IN</MenuItem></>)
           }
