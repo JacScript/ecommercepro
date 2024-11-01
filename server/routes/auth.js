@@ -87,5 +87,26 @@ router.post("/login", async (request, response) => {
     }
   });
   
+// @desc    Logout user
+// @route   POST /auth/logout
+// @access  Public
+router.post("/logout", async (request, response) => {
+  try {
+    // Clear the access token cookie by setting an expired date
+    response.cookie("accessToken", "", {
+      httpOnly: true,       // Ensures cookie is accessible only by the server
+      // secure: process.env.NODE_ENV === "production", // Set secure flag in production
+      expires: new Date(0), // Expire the cookie immediately
+    });
+
+    // Send success response
+    response.status(200).json({ message: "User logged out" });
+  } catch (error) {
+    // Send error response if logout fails
+    response.status(500).json({ message: "Logout failed" });
+  }
+});
+
+
 
 module.exports = router;
