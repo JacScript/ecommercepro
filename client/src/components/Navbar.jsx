@@ -119,17 +119,54 @@ const Navbar = () => {
         <Center>
           <Logo>PENGUIN TECH.</Logo>
         </Center>
+
         <Right>
+  {user ? (
+    <Link to="/profile">
+      <AvatarContainer>            
+        <AvatarName>{user.username}</AvatarName>
+        <TopAvatar 
+          src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" 
+          alt="User Avatar" 
+          className="topAvatar" 
+        />
+      </AvatarContainer>
+    </Link>
+  ) : (
+    <>
+      <MenuItem>
+        <Link to="/register">REGISTER</Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="/signin">SIGN IN</Link>
+      </MenuItem>
+    </>
+  )}
+
+<MenuItem>
+    <Link to="/cart">
+      <Badge badgeContent={quantity} color="primary">
+        <ShoppingCartOutlined />
+      </Badge>
+    </Link>
+  </MenuItem>
+
+  </Right>
+        {/* <Right>
           {
-            user ? (< AvatarContainer>
+            user ? (
+            <Link to="/profile">
+            
+            < AvatarContainer>            
             <AvatarName>{user.username}</AvatarName>
             <TopAvatar src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" className="topAvatar" />
-            </AvatarContainer>) 
+            </AvatarContainer>
+            </Link>
+            
+          ) 
            : (<><MenuItem>REGISTER</MenuItem>
           <MenuItem>SIGN IN</MenuItem></>)
           }
-          {/* <MenuItem>REGISTER</MenuItem>
-          <MenuItem>SIGN IN</MenuItem> */}
           <MenuItem>
           <Link to="/cart">
           
@@ -138,7 +175,7 @@ const Navbar = () => {
             </Badge>
           </Link>
           </MenuItem>
-        </Right>
+        </Right> */}
       </Wrapper>
     </Container>
   );

@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import PrivateRoute from "./pages/PrivateRoute";
 import Success from "./pages/Success";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -21,10 +22,13 @@ const App = () => {
         <Route path="/products/:category" component={ProductList} />
         <Route path="/product/:id" component={Product} />
         <Route path="/cart" component={Cart} />
-        <PrivateRoute path="/login" component={Login} redirect={Home}/>
-        <PrivateRoute path="/register" component={Register} redirect={Home}/>
+        <PrivateRoute path="/login" component={Login} redirect="
+        /"/>
+        <PrivateRoute path="/register" component={Register} redirect="/"/>
+        {/* <PrivateRoute path="/profile" component={Profile} redirect="/"/> */}
         {/* <Route path="/login" component={Login} /> */}
-        <Route path="/register" component={Register} />
+        <Route path="/profile" component={Profile} />
+        {/* <Route path="/login" component={Login} /> */}
         <Route path="/success" component={Success} />
       </Switch>
     </BrowserRouter>

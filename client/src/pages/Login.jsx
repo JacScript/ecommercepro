@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { login } from "../redux/apiCalls";
 import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
   width: 100vw;
@@ -69,15 +70,23 @@ const Error = styled.span`
 `;
 
 const Login = () => {
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const { isFetching, error } = useSelector((state) => state.user);
 
   const handleClick = (e) => {
-    e.preventDefault();
-    login(dispatch, { email, password });
-  };
+  e.preventDefault();
+  login(dispatch, { email, password }).then(() => {
+    history.push("/");
+  });
+};
+
+  // const handleClick = (e) => {
+  //   e.preventDefault();
+  //   login(dispatch, { email, password });
+  // };
   return (
     <Container>
       <Wrapper>
