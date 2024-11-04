@@ -9,6 +9,7 @@ import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { userRequest } from "../requestMethods.js"
+import { Link } from "react-router-dom/cjs/react-router-dom.min.js";
 
 
 
@@ -233,7 +234,10 @@ useEffect(() => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton>
+            <Link to="/" style={{ textDecoration: "none", color: "black" }} >
+            CONTINUE SHOPPING  
+            </Link> </TopButton>
           <TopTexts>
             <TopText>Shopping Bag(2)</TopText>
             <TopText>Your Wishlist (0)</TopText>

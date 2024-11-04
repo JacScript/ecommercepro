@@ -60,25 +60,43 @@ export const register = async (dispatch, user) => {
 // }
 
 
+// export const logout = async (dispatch) => {
+//   // Start the logout process by dispatching a logoutStart action
+//   dispatch(logoutStart());
+//   try {
+//     // Send a logout request to the server
+//     const res = await publicRequest.post("/auth/logout");
+
+//     // Destructure the accessToken from the server response
+//     const { accessToken } = res.data;
+
+//     // Remove the access token from local storage if it exists
+//     if (accessToken) {
+//       localStorage.removeItem("accessToken");
+//     }
+
+//     // Dispatch a logoutSuccess action with the response data
+//     dispatch(logoutSuccess(res.data));
+//   } catch (err) {
+//     // If an error occurs, dispatch a logoutFailure action
+//     dispatch(logoutFailure());
+//   }
+// };
+
 export const logout = async (dispatch) => {
-  // Start the logout process by dispatching a logoutStart action
-  dispatch(logoutStart());
+  dispatch(logoutStart()); // Start the logout process
+  
   try {
     // Send a logout request to the server
-    const res = await publicRequest.post("/auth/logout");
+    await publicRequest.post("/auth/signout");
 
-    // Destructure the accessToken from the server response
-    const { accessToken } = res.data;
+    // Remove any access token or user data from local storage
+    localStorage.removeItem("accessToken");
 
-    // Remove the access token from local storage if it exists
-    if (accessToken) {
-      localStorage.removeItem("accessToken");
-    }
-
-    // Dispatch a logoutSuccess action with the response data
-    dispatch(logoutSuccess(res.data));
+    // Dispatch success action to update the state
+    dispatch(logoutSuccess());
   } catch (err) {
-    // If an error occurs, dispatch a logoutFailure action
+    // Dispatch failure action if an error occurs
     dispatch(logoutFailure());
   }
 };

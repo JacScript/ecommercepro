@@ -14,6 +14,7 @@ import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logout } from "../redux/apiCalls";
+import { persistor } from "../redux/store";
 
 // Styled components
 const Container = styled.div``;
@@ -119,15 +120,38 @@ const Profile = () => {
   const history = useHistory();
   const user = useSelector((state) => state.user.currentUser);
 
-  // Logout handler: dispatches logout and navigates to home
-  const logoutHandler = async () => {
+  // const logoutHandler = async (e) => {
+  //   // e.preventDefault();
+  
+  //   try {
+  //     await logout(dispatch); // Wait for the logout action to complete
+  //     history.push("/"); // Redirect to the home page on successful logout
+  //   } catch (err) {
+  //     console.error("Logout failed:", err); // Log any errors that occur
+  //   }
+  // };
+
+  const logoutHandler = async (e) => {
+    e.preventDefault();
+  
     try {
-      await dispatch(logout()); // Dispatch logout action
-      history.push("/"); // Redirect to home page
+      // Trigger the logout API call
+      await logout(dispatch);
+  
+      // Clear the persisted state from redux-persist
+      await persistor.purge(); // Clears the persisted Redux state
+      await persistor.flush(); // Ensures all changes are written to storage
+  
+      // Clear access token or any other user-specific data from local storage
+       await localStorage.removeItem("accessToken");
+  
+      // Redirect to the home page after successful logout
+      history.push("/");
     } catch (err) {
       console.error("Logout failed:", err);
     }
   };
+  
 
   return (
     <Container>
@@ -173,7 +197,7 @@ const Profile = () => {
                 <Label>City</Label>
                 <Input
                   type="text"
-                  value={user.address.city}
+                  value={user.address.city || ""}
                   name="city"
                   readOnly
                 />

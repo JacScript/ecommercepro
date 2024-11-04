@@ -66,7 +66,6 @@ const MenuItem = styled.div`
   font-size: 14px;
   cursor: pointer;
   align-item: center;
- 
   margin-left: 25px;
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
@@ -103,6 +102,7 @@ const AvatarContainer = styled.div`
   // background-color: red;
 `;
 
+
 const Navbar = () => {
   const  user  = useSelector((state) => state.user.currentUser);
   const quantity = useSelector(state=>state.cart.quantity);
@@ -122,7 +122,7 @@ const Navbar = () => {
 
         <Right>
   {user ? (
-    <Link to="/profile">
+     <Link  style={{ textDecoration: "none", color: "black" }} to="/profile">
       <AvatarContainer>            
         <AvatarName>{user.username}</AvatarName>
         <TopAvatar 
@@ -135,10 +135,11 @@ const Navbar = () => {
   ) : (
     <>
       <MenuItem>
-        <Link to="/register">REGISTER</Link>
+  
+        <Link  style={{ textDecoration: "none", color: "black" }} to="/register">REGISTER</Link>
       </MenuItem>
       <MenuItem>
-        <Link to="/signin">SIGN IN</Link>
+        <Link  style={{ textDecoration: "none", color: "black" }} to="/login">SIGN IN</Link>
       </MenuItem>
     </>
   )}

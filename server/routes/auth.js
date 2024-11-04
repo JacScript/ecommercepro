@@ -90,7 +90,7 @@ router.post("/login", async (request, response) => {
 // @desc    Logout user
 // @route   POST /auth/logout
 // @access  Public
-router.post("/logout", async (request, response) => {
+router.post("/signout", async (request, response) => {
   try {
     // Clear the access token cookie by setting an expired date
     response.cookie("accessToken", "", {
