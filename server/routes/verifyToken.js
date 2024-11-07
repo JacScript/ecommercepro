@@ -29,13 +29,23 @@ const verifyTokenAndAuthorization = (request, response, next) => {
 
 const verifyTokenAndAdmin = (request, response, next) => {
   verifyToken(request, response, () => {
-    if (request.user.isAdmin) {
+    if (request.user && request.user.isAdmin) {
       next();
     } else {
-      response.status(403).json("You are not allowed to do that!!");
+      response.status(403).json("You are not allowed to do that!");
     }
   });
 };
+
+// const verifyTokenAndAdmin = (request, response, next) => {
+//   verifyToken(request, response, () => {
+//     if ( request.user && request.user.isAdmin) {
+//       next();
+//     } else {
+//       response.status(403).json("You are not allowed to do that!!");
+//     }
+//   });
+// };
 
 module.exports = {
   verifyToken,

@@ -53,7 +53,7 @@ const UpdateTitle = styled.span`
   font-weight: 600;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   justify-content: space-between;
   margin-top: 20px;

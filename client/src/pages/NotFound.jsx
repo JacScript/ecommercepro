@@ -1,6 +1,6 @@
 // pages/NotFound.js
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation , Link} from "react-router-dom";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,6 +12,7 @@ const NotFound = () => {
       <p>
         <strong>URL:</strong> {location.pathname}
       </p>
+      <p>Go to <Link to="/">Home</Link></p>
     </div>
   );
 };
